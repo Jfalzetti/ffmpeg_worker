@@ -18,7 +18,7 @@ fs.renameSync(image.path, imagePath);
 fs.renameSync(audio.path, audioPath);
 
 const output = `uploads/${Date.now()}.mp4`;
-const command = `ffmpeg -loop 1 -i ${imagePath} -i ${audioPath} -t 60 -c:v libx264 -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p ${output}`;
+const command = `ffmpeg -loop 1 -framerate 1 -i ${imagePath} -i ${audioPath} -t 60 -vf scale=1280:720 -c:v libx264 -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p ${output}`;
 
   exec(command, (error) => {
     if (error) {
