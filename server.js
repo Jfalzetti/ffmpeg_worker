@@ -8,11 +8,18 @@ const app = express();
 const upload = multer({ dest: 'uploads/' });
 
 app.post('/render', upload.fields([{ name: 'image' }, { name: 'audio' }]), (req, res) => {
-  const image = req.files.image[0];
-  const audio = req.files.audio[0];
-  const output = `uploads/${Date.now()}.mp4`;
+const image = req.files.image[0];
+const audio = req.files.audio[0];
 
-  const command = `ffmpeg -loop 1 -i ${image.path} -i ${audio.path} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p ${output}`;
+const imagePath = `${image.path}.jpg`;
+const audioPath = `${audio.path}.mp3`;
+
+fs.renameSync(image.path, imagePath);
+fs.renameSync(audio.path, audioPath);
+
+const output = `uploads/${Date.now()}.mp4`;
+const command = `ffmpeg -loop 1 -i ${imagePath} -i ${audioPath} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p ${output}`;
+
 
   exec(command, (error) => {
     if (error) {
