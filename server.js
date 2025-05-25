@@ -16,7 +16,7 @@ app.post('/render', upload.fields([{ name: 'image' }, { name: 'audio' }]), (req,
 
   exec(command, (error) => {
     if (error) {
-      console.error('ffmpeg error:', error);
+      console.error('ffmpeg full error:', error);
       return res.status(500).send('Render failed');
     }
 
